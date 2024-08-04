@@ -172,7 +172,8 @@ func readDS(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Dia
 }
 
 func list(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	tflog.Info(ctx, "started read")
+	tflog.Info(ctx, "started list")
+	projectName := d.Get(projectNameVar).(string)
 	clientinfo, ok := m.(*helper.ClientInfo)
 	if !ok {
 		return diag.Errorf("failed to get client")
@@ -186,7 +187,7 @@ func list(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagn
 	req.Queries = append(req.Queries, &user.UserGrantQuery{
 		Query: &user.UserGrantQuery_ProjectNameQuery{
 			ProjectNameQuery: &user.UserGrantProjectNameQuery{
-				ProjectName: projectNameVar,
+				ProjectName: projectName,
 				Method:      3,
 			},
 		},
@@ -195,7 +196,7 @@ func list(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagn
 	resp, err := client.ListUserGrants(ctx, req)
 
 	if err != nil {
-		return diag.Errorf("error while getting roles by projName %s: %v", projectNameVar, err)
+		return diag.Errorf("error while getting roles by projName %s: %v", projectName, err)
 	}
 	results := []map[string]interface{}{}
 	for _, roleGrant := range resp.Result {
