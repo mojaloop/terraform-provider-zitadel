@@ -186,23 +186,14 @@ func list(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagn
 	req := &management.ListUserGrantRequest{}
 
 	req.Queries = append(req.Queries, &user.UserGrantQuery{
-		Query: &user.UserGrantQuery_OrgNameQuery{
-			OrgNameQuery: &user.UserGrantOrgNameQuery{
-				OrgName: orgName,
-				Method:  object.TextQueryMethod_TEXT_QUERY_METHOD_EQUALS_IGNORE_CASE,
+		Query: &user.UserGrantQuery_ProjectNameQuery{
+			ProjectNameQuery: &user.UserGrantProjectNameQuery{
+				ProjectName: projectNameVar,
+				Method:      object.TextQueryMethod_TEXT_QUERY_METHOD_EQUALS_IGNORE_CASE,
 			},
 		},
 	})
-	if projectNameVar != "" {
-		req.Queries = append(req.Queries, &user.UserGrantQuery{
-			Query: &user.UserGrantQuery_ProjectNameQuery{
-				ProjectNameQuery: &user.UserGrantProjectNameQuery{
-					ProjectName: projectNameVar,
-					Method:      object.TextQueryMethod_TEXT_QUERY_METHOD_EQUALS_IGNORE_CASE,
-				},
-			},
-		})
-	}
+
 	resp, err := client.ListUserGrants(ctx, req)
 
 	if err != nil {

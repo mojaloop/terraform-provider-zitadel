@@ -57,14 +57,9 @@ func ListDatasources() *schema.Resource {
 	return &schema.Resource{
 		Description: "represents role grants",
 		Schema: map[string]*schema.Schema{
-			OrgNameVar: {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: "name of the org",
-			},
 			projectNameVar: {
 				Type:        schema.TypeString,
-				Optional:    true,
+				Required:    true,
 				Description: "Name of the project.",
 			},
 			userGrantDataVar: {
