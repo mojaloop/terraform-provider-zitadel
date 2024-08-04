@@ -27,7 +27,7 @@ func GetDatasource() *schema.Resource {
 			projectNameVar: {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "Name of the org.",
+				Description: "Name of the project.",
 				Computed:    true,
 			},
 			roleStatusVar: {
@@ -39,7 +39,13 @@ func GetDatasource() *schema.Resource {
 			userNameVar: {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "A domain of the org.",
+				Description: "username",
+				Computed:    true,
+			},
+			emailVar: {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "email of user",
 				Computed:    true,
 			},
 		},
@@ -81,7 +87,7 @@ func ListDatasources() *schema.Resource {
 						projectNameVar: {
 							Type:        schema.TypeString,
 							Optional:    true,
-							Description: "Name of the org.",
+							Description: "Name of the project.",
 							Computed:    true,
 						},
 						roleStatusVar: {
@@ -93,7 +99,13 @@ func ListDatasources() *schema.Resource {
 						userNameVar: {
 							Type:        schema.TypeString,
 							Optional:    true,
-							Description: "A domain of the org.",
+							Description: "username",
+							Computed:    true,
+						},
+						emailVar: {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "email of user",
 							Computed:    true,
 						},
 					},

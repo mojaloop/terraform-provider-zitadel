@@ -12,4 +12,5 @@ const (
 	projectNameVar    = "project_name"
 	roleNamesVar      = "role_names"
 	userGrantDataVar  = "user_grant_data"
+	emailVar          = "email"
 )
