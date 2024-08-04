@@ -28,7 +28,6 @@ func GetDatasource() *schema.Resource {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Description: "Name of the project.",
-				Computed:    true,
 			},
 			roleStatusVar: {
 				Type:        schema.TypeString,
