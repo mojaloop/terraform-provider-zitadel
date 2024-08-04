@@ -153,7 +153,7 @@ func readDS(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Dia
 		UserIDVar:      grant.GetUserId(),
 		RoleKeysVar:    grant.GetRoleKeys(),
 		userNameVar:    grant.GetUserName(),
-		roleStatusVar:  grant.GetState(),
+		roleStatusVar:  grant.GetState().String(),
 		projectNameVar: grant.GetProjectName(),
 	}
 	if grant.GetProjectId() != "" {
@@ -204,7 +204,7 @@ func list(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagn
 			grantIDVar:     roleGrant.Id,
 			RoleKeysVar:    roleGrant.GetRoleKeys(),
 			userNameVar:    roleGrant.GetUserName(),
-			roleStatusVar:  roleGrant.GetState(),
+			roleStatusVar:  roleGrant.GetState().String(),
 			projectNameVar: roleGrant.GetProjectName(),
 		})
 	}
