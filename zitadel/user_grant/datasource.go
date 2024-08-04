@@ -28,6 +28,7 @@ func GetDatasource() *schema.Resource {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Description: "Name of the project.",
+				Computed:    true,
 			},
 			roleStatusVar: {
 				Type:        schema.TypeString,
@@ -59,12 +60,17 @@ func ListDatasources() *schema.Resource {
 			OrgNameVar: {
 				Type:        schema.TypeString,
 				Required:    true,
-				Description: "ID of the project",
+				Description: "name of the org",
+			},
+			projectNameVar: {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Name of the project.",
 			},
 			userGrantDataVar: {
 				Type:        schema.TypeList,
 				Computed:    true,
-				Description: "A list of all grantid and userids.",
+				Description: "A list of all usergrants.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						grantIDVar: {
