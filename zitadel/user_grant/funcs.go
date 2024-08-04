@@ -127,6 +127,50 @@ func read(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagn
 	return nil
 }
 
+func readDS(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	tflog.Info(ctx, "started read")
+	clientinfo, ok := m.(*helper.ClientInfo)
+	if !ok {
+		return diag.Errorf("failed to get client")
+	}
+	client, err := helper.GetManagementClient(clientinfo)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	resp, err := client.GetUserGrantByID(helper.CtxWithOrgID(ctx, d), &management.GetUserGrantByIDRequest{
+		GrantId: helper.GetID(d, grantIDVar),
+		UserId:  d.Get(UserIDVar).(string),
+	})
+	if err != nil && helper.IgnoreIfNotFoundError(err) == nil {
+		d.SetId("")
+		return nil
+	}
+	if err != nil {
+		return diag.Errorf("failed to get user grant")
+	}
+	grant := resp.GetUserGrant()
+	set := map[string]interface{}{
+		UserIDVar:      grant.GetUserId(),
+		RoleKeysVar:    grant.GetRoleKeys(),
+		userNameVar:    grant.GetUserName(),
+		roleStatusVar:  grant.GetState(),
+		projectNameVar: grant.GetProjectName(),
+	}
+	if grant.GetProjectId() != "" {
+		set[projectIDVar] = grant.GetProjectId()
+	}
+	if grant.GetProjectGrantId() != "" {
+		set[projectGrantIDVar] = grant.GetProjectGrantId()
+	}
+	for k, v := range set {
+		if err := d.Set(k, v); err != nil {
+			return diag.Errorf("failed to set %s of usergrant: %v", k, err)
+		}
+	}
+	d.SetId(grant.GetId())
+	return nil
+}
+
 func list(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	tflog.Info(ctx, "started read")
 	orgName := d.Get(OrgNameVar).(string)

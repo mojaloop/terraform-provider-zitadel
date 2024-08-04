@@ -13,13 +13,12 @@ func GetDatasource() *schema.Resource {
 				Required:    true,
 				Description: "ID of the usergrant",
 			},
-			OrgNameVar: {
+			UserIDVar: {
 				Type:        schema.TypeString,
 				Required:    true,
-				Description: "ID of the project",
-				Computed:    true,
+				Description: "ID of the user",
 			},
-			roleNamesVar: {
+			RoleKeysVar: {
 				Type:        schema.TypeList,
 				Computed:    true,
 				Description: "A set of all roles for a user.",
@@ -44,7 +43,7 @@ func GetDatasource() *schema.Resource {
 				Computed:    true,
 			},
 		},
-		ReadContext: read,
+		ReadContext: readDS,
 	}
 }
 
