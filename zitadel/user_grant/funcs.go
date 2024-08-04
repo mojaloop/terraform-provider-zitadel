@@ -193,6 +193,16 @@ func list(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagn
 			},
 		},
 	})
+	if projectNameVar != "" {
+		req.Queries = append(req.Queries, &user.UserGrantQuery{
+			Query: &user.UserGrantQuery_ProjectNameQuery{
+				ProjectNameQuery: &user.UserGrantProjectNameQuery{
+					ProjectName: projectNameVar,
+					Method:      object.TextQueryMethod_TEXT_QUERY_METHOD_EQUALS_IGNORE_CASE,
+				},
+			},
+		})
+	}
 	resp, err := client.ListUserGrants(ctx, req)
 
 	if err != nil {
@@ -201,6 +211,7 @@ func list(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagn
 	results := []map[string]interface{}{}
 	for _, roleGrant := range resp.Result {
 		results = append(results, map[string]interface{}{
+			orgName:        roleGrant.OrgName,
 			UserIDVar:      roleGrant.UserId,
 			grantIDVar:     roleGrant.Id,
 			RoleKeysVar:    roleGrant.GetRoleKeys(),
