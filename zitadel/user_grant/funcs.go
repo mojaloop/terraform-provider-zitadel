@@ -8,7 +8,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/zitadel/terraform-provider-zitadel/zitadel/helper"
 	"github.com/zitadel/zitadel-go/v2/pkg/client/zitadel/management"
-	"github.com/zitadel/zitadel-go/v2/pkg/client/zitadel/object"
 	"github.com/zitadel/zitadel-go/v2/pkg/client/zitadel/user"
 )
 
@@ -188,7 +187,7 @@ func list(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagn
 		Query: &user.UserGrantQuery_ProjectNameQuery{
 			ProjectNameQuery: &user.UserGrantProjectNameQuery{
 				ProjectName: projectNameVar,
-				Method:      object.TextQueryMethod_TEXT_QUERY_METHOD_EQUALS_IGNORE_CASE,
+				Method:      3,
 			},
 		},
 	})
