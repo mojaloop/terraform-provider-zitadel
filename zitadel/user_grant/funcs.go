@@ -200,8 +200,12 @@ func list(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagn
 	results := []map[string]interface{}{}
 	for _, roleGrant := range resp.Result {
 		results = append(results, map[string]interface{}{
-			UserIDVar:  roleGrant.UserId,
-			grantIDVar: roleGrant.Id,
+			UserIDVar:      roleGrant.UserId,
+			grantIDVar:     roleGrant.Id,
+			RoleKeysVar:    roleGrant.GetRoleKeys(),
+			userNameVar:    roleGrant.GetUserName(),
+			roleStatusVar:  roleGrant.GetState(),
+			projectNameVar: roleGrant.GetProjectName(),
 		})
 	}
 	// If the ID is blank, the datasource is deleted and not usable.
