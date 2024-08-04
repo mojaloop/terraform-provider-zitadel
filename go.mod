@@ -72,4 +72,4 @@ require (
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 )
 
-replace github.com/zitadel/terraform-provider-zitadel => github.com/mojaloop/terraform-provider-zitadel v1.3.1
+replace github.com/zitadel/terraform-provider-zitadel => github.com/mojaloop/terraform-provider-zitadel v1.3.2
