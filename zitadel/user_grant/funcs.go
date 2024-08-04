@@ -6,9 +6,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"github.com/zitadel/zitadel-go/v2/pkg/client/zitadel/management"
-
 	"github.com/zitadel/terraform-provider-zitadel/zitadel/helper"
+	"github.com/zitadel/zitadel-go/v2/pkg/client/zitadel/management"
+	"github.com/zitadel/zitadel-go/v2/pkg/client/zitadel/object"
+	"github.com/zitadel/zitadel-go/v2/pkg/client/zitadel/user"
 )
 
 func delete(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
@@ -124,4 +125,43 @@ func read(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagn
 	}
 	d.SetId(grant.GetId())
 	return nil
+}
+
+func list(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	tflog.Info(ctx, "started read")
+	orgName := d.Get(OrgNameVar).(string)
+	clientinfo, ok := m.(*helper.ClientInfo)
+	if !ok {
+		return diag.Errorf("failed to get client")
+	}
+	client, err := helper.GetManagementClient(clientinfo)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	req := &management.ListUserGrantRequest{}
+
+	req.Queries = append(req.Queries, &user.UserGrantQuery{
+		Query: &user.UserGrantQuery_OrgNameQuery{
+			OrgNameQuery: &user.UserGrantOrgNameQuery{
+				OrgName: orgName,
+				Method:  object.TextQueryMethod_TEXT_QUERY_METHOD_EQUALS_IGNORE_CASE,
+			},
+		},
+	})
+	resp, err := client.ListUserGrants(ctx, req)
+
+	if err != nil {
+		return diag.Errorf("error while getting roles by orgName %s: %v", orgName, err)
+	}
+	results := []map[string]interface{}{}
+	for _, roleGrant := range resp.Result {
+		results = append(results, map[string]interface{}{
+			UserIDVar:  roleGrant.UserId,
+			grantIDVar: roleGrant.Id,
+		})
+	}
+	// If the ID is blank, the datasource is deleted and not usable.
+	d.SetId("-")
+	return diag.FromErr(d.Set(userGrantDataVar, results))
+
 }
