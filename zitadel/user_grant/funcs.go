@@ -155,6 +155,7 @@ func readDS(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Dia
 		roleStatusVar:  grant.GetState().String(),
 		projectNameVar: grant.GetProjectName(),
 		emailVar:       grant.Email,
+		nameVar:        grant.DisplayName,
 	}
 	if grant.GetProjectId() != "" {
 		set[projectIDVar] = grant.GetProjectId()
@@ -208,6 +209,7 @@ func list(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagn
 			roleStatusVar:  roleGrant.GetState().String(),
 			projectNameVar: roleGrant.GetProjectName(),
 			emailVar:       roleGrant.Email,
+			nameVar:        roleGrant.DisplayName,
 		})
 	}
 	// If the ID is blank, the datasource is deleted and not usable.

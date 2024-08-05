@@ -48,6 +48,12 @@ func GetDatasource() *schema.Resource {
 				Description: "email of user",
 				Computed:    true,
 			},
+			nameVar: {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "display name of user",
+				Computed:    true,
+			},
 		},
 		ReadContext: readDS,
 	}
@@ -106,6 +112,12 @@ func ListDatasources() *schema.Resource {
 							Type:        schema.TypeString,
 							Optional:    true,
 							Description: "email of user",
+							Computed:    true,
+						},
+						nameVar: {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "display name of user",
 							Computed:    true,
 						},
 					},

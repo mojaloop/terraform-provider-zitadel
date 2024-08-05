@@ -13,4 +13,5 @@ const (
 	roleNamesVar      = "role_names"
 	userGrantDataVar  = "user_grant_data"
 	emailVar          = "email"
+	nameVar           = "name"
 )
